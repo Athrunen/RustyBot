@@ -20,9 +20,6 @@ struct Product<'a> {
 }
 
 async fn get_products_info(products: &mut HashMap<String, Product<'_>>) -> color_eyre::Result<()> {
-  // Price
-  // Status
-  // Name
   for name in products.clone().keys() {
     let product = products.get_mut(name).unwrap();
     let delivery_info = product.element.find_element(By::Css(".delivery-info")).await?;
@@ -55,8 +52,9 @@ async fn buy_product(driver: &WebDriver, bot: &AutoSend<Bot>, link: &str) -> col
   send_screenshot(driver, bot).await?;
 
   // Buy
-  //driver.find_element(By::XPath("//input[@class='buyNowBtn' and @value='Jetzt kaufen']")).await?.click().await?;
-  //send_screenshot(driver, bot).await?;
+  driver.find_element(By::XPath("//input[@class='buyNowBtn' and @value='Jetzt kaufen']")).await?.click().await?;
+  tokio::time::sleep(Duration::from_secs(5)).await;
+  send_screenshot(driver, bot).await?;
 
   // Empty cart
   driver.get("https://www.alternate.de/cart.xhtml?t=&q=").await?;
@@ -188,7 +186,7 @@ async fn main() -> color_eyre::Result<()> {
 
   open_page(&driver, &mut pages, "paypal", "https://www.paypal.com/de/signin").await?;
 
-  //paypal_login(&driver, &bot).await?;
+  paypal_login(&driver, &bot).await?;
 
   switch_page(&driver, &pages, "search").await?;
 
